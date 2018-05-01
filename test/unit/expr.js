@@ -13,10 +13,10 @@ describe('expression test',function(){
     ast = Parser.parse(sql);
     //inspect(ast.columns);
     ast.columns.should.eql([ 
-      { expr: { type: 'number', value: 1 },as: '' },
-      { expr: { type: 'string', value: 'str' },as: '' },
-      { expr: { type: 'column_ref', column: 'select', table : '' },as: '' },
-      { expr: { type: 'bool', value: true },as: '' },
+      { expr: { type: 'number', value: 1 },as: null },
+      { expr: { type: 'string', value: 'str' },as: null },
+      { expr: { type: 'column_ref', column: 'select', table : '' },as: null },
+      { expr: { type: 'bool', value: true },as: null },
       { 
         expr: { 
           type: 'function',
@@ -26,7 +26,7 @@ describe('expression test',function(){
             value : [ { type: 'number', value: 4 } ]
           }
         },
-        as: ''
+        as: null
       },
       { 
         expr: { 
@@ -37,7 +37,7 @@ describe('expression test',function(){
             value : []
           }
         },
-        as: ''
+        as: null
       },
       { 
         expr: { 
@@ -46,7 +46,7 @@ describe('expression test',function(){
           left: { type: 'param', value: 'id' },
           right: { type: 'number', value: 1 } 
         },
-        as: '' 
+        as: null 
       },
       { 
         expr: { 
@@ -54,9 +54,9 @@ describe('expression test',function(){
           table: '',
           column: 'cf1:name'
         },
-        as: '' 
+        as: null 
       },
-      { expr: { type: 'param', value: 'select' },as: '' } 
+      { expr: { type: 'param', value: 'select' },as: null } 
     ]) 
   });
 
@@ -80,7 +80,7 @@ describe('expression test',function(){
             } 
           } 
         },
-        as: '' 
+        as: null 
       },
       { 
         expr: { 
@@ -92,7 +92,7 @@ describe('expression test',function(){
             } 
           }
         },
-        as: '' 
+        as: null 
       }, 
       { 
         expr: { 
@@ -106,7 +106,7 @@ describe('expression test',function(){
             } 
           }
         },
-        as: '' 
+        as: null 
       } 
     ]);
 
@@ -151,7 +151,7 @@ describe('expression test',function(){
         },
         paren: true 
       },
-      as: '' 
+      as: null 
     }]);
 
   });
@@ -214,7 +214,7 @@ describe('expression test',function(){
         },
         paren: true 
       },
-      as: '' 
+      as: null 
     }]);
 
   });

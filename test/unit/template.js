@@ -18,7 +18,7 @@ describe('template test',function(){
     //inspect(east);
     ast.should.eql({
         type: 'select',
-        distinct: '',
+        distinct: null,
         columns: [ 
           { 
             expr: { 
@@ -61,14 +61,14 @@ describe('template test',function(){
               },
               paren: true 
             },
-            as: '' 
+            as: null 
           } 
         ],
-        from: '',
-        where: '',
-        groupby: '',
-        orderby: '',
-        limit: '' 
+        from: null,
+        where: null,
+        groupby: null,
+        orderby: null,
+        limit: null 
     });
 
     sql = 'select ( a NOT CONTAINS (:id, 1) AND c = :name)';
@@ -119,7 +119,7 @@ describe('template test',function(){
           },
           paren: true 
         },
-        as: '' 
+        as: null 
       } 
     ]);
 

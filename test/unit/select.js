@@ -10,27 +10,15 @@ describe('select test',function(){
   it('clauses test', function() {
     var sql, ast;
 
-    sql = "SELECT a";
-    ast = Parser.parse(sql);
-
-    ast.columns.length.should.eql(1)
-    ast.distinct.should.eql('');
-    ast.where.should.eql('');
-    ast.from.should.eql('');
-    ast.groupby.should.eql('');
-    ast.orderby.should.eql('');
-    ast.limit.should.eql('');
-
-
     sql = "SELECT DISTINCT a FROM b WHERE c = 0 GROUP BY d ORDER BY e limit 3";
     ast = Parser.parse(sql);
 
     ast.distinct.should.eql('DISTINCT');
-    ast.from.should.not.eql('');
-    ast.where.should.not.eql('');
-    ast.groupby.should.not.eql('');
-    ast.orderby.should.not.eql('');
-    ast.limit.should.not.eql('');
+    ast.from.should.not.eql(null);
+    ast.where.should.not.eql(null);
+    ast.groupby.should.not.eql(null);
+    ast.orderby.should.not.eql(null);
+    ast.limit.should.not.eql(null);
   });   
 
   it('limit test', function() {
@@ -108,7 +96,7 @@ describe('select test',function(){
             value : [ { type: 'column_ref', table: '', column: 'd' } ]
           }
         },
-        as: '' 
+        as: null 
       },
       { 
         expr: { 
@@ -123,7 +111,7 @@ describe('select test',function(){
             value : 3
           }
         },
-        as: '' 
+        as: null 
       } 
     ]);
    
@@ -189,7 +177,7 @@ describe('select test',function(){
 
     //inspect(ast.from);
     ast.from.should.eql([ 
-      { db: '', table: 't', as: '' },
+      { db: '', table: 't', as: null },
       { db: 'a', table: 'b', as: 'b' },
       { db: 'c', table: 'd', as: 'cd' } 
     ]);
@@ -200,7 +188,7 @@ describe('select test',function(){
 
     //inspect(ast.from);
     ast.from.should.eql([ 
-      { db: '', table: 't', as: '' },
+      { db: '', table: 't', as: null },
       { 
         db: 'a',
         table: 'b',
@@ -224,7 +212,7 @@ describe('select test',function(){
       { 
         db: '',
         table: 'd',
-        as: '',
+        as: null,
         join: 'LEFT JOIN',
         on: { 
           type: 'binary_expr',
@@ -269,7 +257,7 @@ describe('select test',function(){
       e = _e;
     }
 
-    (e.constructor === Error).should.eql(true);
+    (e.name).should.eql('SyntaxError');
   });
 
 })

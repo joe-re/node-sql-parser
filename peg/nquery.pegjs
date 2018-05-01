@@ -49,7 +49,7 @@
     for (var i = 0; i < epList.length; i++) {
       ep = epList[i]; 
       //the ep has already added to the global params
-      if (ep.type == 'param') {
+      if (ep && ep.type == 'param') {
         ep.room = room;
         ep.pos  = i;
       } else {
@@ -102,7 +102,7 @@
 }
 
 start 
-  = &init __ ast:(union_stmt  / update_stmt / replace_insert_stmt ) {
+  = &{ params = []; return true; } __ ast:(union_stmt  / update_stmt / replace_insert_stmt ) {
       return {
         ast   : ast,
         param : params
@@ -113,8 +113,6 @@ start
         ast : ast  
       }
     }
-
-init  = { params = []; return true; }
 
 union_stmt
   = head:select_stmt tail:(__ KW_UNION __ select_stmt)* {
@@ -210,7 +208,7 @@ table_join
 //NOTE that ,the table assigned to `var` shouldn't write in `table_join`
 table_base 
   = db:db_name __ DOT __ t:table_name __ KW_AS? __ alias:ident? {
-      if (t.type == 'var') {
+      if (t && t.type == 'var') {
         t.as = alias;
         return t;
       } else {
@@ -222,7 +220,7 @@ table_base
       }
     }
   / t:table_name __ KW_AS? __ alias:ident? {
-      if (t.type == 'var') {
+      if (t && t.type == 'var') {
         t.as = alias;
         return t;
       } else {
@@ -295,7 +293,7 @@ number_or_param
 limit_clause
   = KW_LIMIT __ i1:(number_or_param) __ tail:(COMMA __ number_or_param)? {
       var res = [i1];
-      if (tail == '') {
+      if (tail === null) {
         res.unshift({
           type  : 'number',
           value : 0
@@ -464,7 +462,7 @@ expr_list
 
 expr_list_or_empty
   = l:expr_list 
-  / { 
+  / "" {
       return { 
         type  : 'expr_list',
         value : []
@@ -505,14 +503,14 @@ not_expr
 
 comparison_expr
   = left:additive_expr __ rh:comparison_op_right? {
-      if (rh == '') {
+      if (rh === null) {
         return left;  
       } else {
         var res = null;
-        if (rh.type == 'arithmetic') {
+        if (rh !== null && rh.type == 'arithmetic') {
           res = createBinaryExprChain(left, rh.tail);
         } else {
-          res = createBinaryExpr(rh.op, left, rh.right);
+          res = createBinaryExpr(rh && rh.op, left, rh && rh.right);
         }
         return res;
       }
@@ -874,7 +872,7 @@ hexDigit
   = [0-9a-fA-F]
 
 e
-  = e:[eE] sign:[+-]? { return e + sign; }
+  = e:[eE] sign:[+-]? { return e + (sign || ''); }
 
 
 KW_NULL      = "NULL"i     !ident_start
@@ -968,14 +966,12 @@ proc_stmts
   = proc_stmt* 
 
 proc_stmt 
-  = &proc_init __ s:(assign_stmt / return_stmt) {
+  = &{ varList = []; return true; } __ s:(assign_stmt / return_stmt) {
       return {
         stmt : s,
         vars: varList
       }
     }
-
-proc_init  = { varList = []; return true; }
 
 assign_stmt 
   = va:var_decl __ KW_ASSIGN __ e:proc_expr {
