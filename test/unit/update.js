@@ -78,7 +78,11 @@ describe('update test',function(){
         {
           column: 'last_login_ip',
           table: 'user_info',
-          value: { type: 'string', value: 'hohoo' }
+          value: { type: 'string', value: 'hohoo' },
+          location: {
+            end: { "column": 174, "line": 1, "offset": 173 },
+            start: { "column": 149, "line": 1, "offset": 148 }
+          }
         },
         {
           column: 'login_count',
@@ -103,7 +107,11 @@ describe('update test',function(){
         left: {
           type: 'column_ref',
           table: 'user_info',
-          column: 'id'
+          column: 'id',
+          location: {
+            end: { "column": 199, "line": 1, "offset": 198 },
+            start: { "column": 183, "line": 1, "offset": 182 }
+           }
         },
         right: {
           type: 'number', value: 334094

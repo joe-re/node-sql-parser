@@ -656,14 +656,16 @@ column_ref
       return {
         type  : 'column_ref',
         table : tbl, 
-        column : col
+        column : col,
+        location: location()
       }; 
     } 
   / col:column {
       return {
         type  : 'column_ref',
         table : '', 
-        column: col
+        column: col,
+        location: location()
       };
     }
 

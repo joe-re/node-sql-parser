@@ -468,14 +468,16 @@ function peg$parse(input, options) {
             return {
               type  : 'column_ref',
               table : tbl, 
-              column : col
+              column : col,
+              location: location()
             }; 
           },
       peg$c82 = function(col) {
             return {
               type  : 'column_ref',
               table : '', 
-              column: col
+              column: col,
+              location: location()
             };
           },
       peg$c83 = function(name) { return reservedMap[name.toUpperCase()] === true; },
