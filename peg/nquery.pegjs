@@ -130,6 +130,16 @@ select_stmt
       return s[2]; 
     }
 
+extract_from_clause
+  = f:from_clause? __
+    o:(.*) {
+      return {
+        from: f,
+        other: o.join('')
+      }
+    }
+
+
 select_stmt_nake
   = KW_SELECT           __ 
     d:KW_DISTINCT?      __
@@ -148,7 +158,7 @@ select_stmt_nake
         groupby   : g,
         orderby   : o,
         limit     : l
-      }   
+      }
   }
 
 column_clause
@@ -215,7 +225,8 @@ table_base
         return  {
           db    : db,
           table : t,
-          as    : alias
+          as    : alias,
+          location: location()
         }
       }
     }
@@ -227,7 +238,8 @@ table_base
         return  {
           db    : '',
           table : t,
-          as    : alias
+          as    : alias,
+          location: location()
         }
       }
     }
@@ -253,8 +265,7 @@ on_clause
   = KW_ON __ e:expr { return e; }
 
 where_clause 
-  = KW_WHERE __ e:expr { return e; }
-
+  = KW_WHERE __ e:expr { return e; } 
 group_by_clause
   = KW_GROUP __ KW_BY __ l:column_ref_list { return l; }
 
