@@ -127,7 +127,7 @@ union_stmt
 select_stmt
   =  select_stmt_nake
   / s:('(' __ select_stmt __ ')') {
-      return s[2]; 
+      return s[2];
     }
 
 extract_from_clause
@@ -213,8 +213,8 @@ table_join
         on    : expr
       }
     */
-    } 
- 
+    }
+
 //NOTE that ,the table assigned to `var` shouldn't write in `table_join`
 table_base
   = db:db_name __ DOT __ t:table_name __ KW_AS? __ alias:ident? {
@@ -248,9 +248,12 @@ table_base
   / s:select_stmt __ KW_AS? __ alias:ident? {
       return  { type: 'subquery', subquery: s, as: alias, location: location() };
     }
+  / LPAREN __ text:([^)]*) __ RPAREN __ KW_AS? __ alias:ident? {
+      return  { type: 'incomplete_subquery', text: text.join(''), as: alias, location: location() };
+    }
 
 join_op
-  = KW_LEFT __ KW_JOIN { return 'LEFT JOIN'; } 
+  = KW_LEFT __ KW_JOIN { return 'LEFT JOIN'; }
   / (KW_INNER __)? KW_JOIN { return 'INNER JOIN'; }
 
 db_name
@@ -696,9 +699,9 @@ column_list
       return createList(head, tail);
     }
 
-ident = 
+ident =
   name:ident_name !{ return reservedMap[name.toUpperCase()] === true; } {
-    return name;  
+    return name;
   }
   / '`' chars:[^`]+ '`' {
     return chars.join('');

@@ -617,5 +617,14 @@ describe('select test',function(){
     ast.from[0].type.should.eql('subquery')
     ast.from[0].as.should.eql('sub')
   });
+
+  it('incomplete FROM clause subquery test', function() {
+    var sql, ast;
+    sql = "SELECT sub FROM (SELECT e. FROM employees e) sub";
+    ast = Parser.parse(sql);
+    ast.from[0].type.should.eql('incomplete_subquery')
+    ast.from[0].as.should.eql('sub')
+    ast.from[0].text.should.eql('SELECT e. FROM employees e')
+  });
 })
 
