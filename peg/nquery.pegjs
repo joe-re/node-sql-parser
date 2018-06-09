@@ -244,7 +244,7 @@ table_base
       }
     }
   / s:select_stmt __ KW_AS? __ alias:ident? {
-      return  { subquery: s, as: alias };
+      return  { type: 'subquery', subquery: s, as: alias };
     }
 
 join_op

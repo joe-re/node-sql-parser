@@ -608,8 +608,8 @@ describe('select test',function(){
 
     sql = "SELECT sub FROM (SELECT * FROM tutorial.sf_crime_incidents_2014_01 WHERE day_of_week = 'Friday') sub WHERE sub.resolution = 'NONE'";
     ast = Parser.parse(sql);
-    console.log(ast)
-    // ast.where.right.type.should.eql('select')
+    ast.from[0].type.should.eql('subquery')
+    ast.from[0].as.should.eql('sub')
   });
 })
 

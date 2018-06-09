@@ -247,7 +247,7 @@ function peg$parse(input, options) {
             }
           },
       peg$c22 = function(s, alias) {
-            return  { subquery: s, as: alias };
+            return  { type: 'subquery', subquery: s, as: alias };
           },
       peg$c23 = function() { return 'LEFT JOIN'; },
       peg$c24 = function() { return 'INNER JOIN'; },
