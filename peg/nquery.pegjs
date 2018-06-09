@@ -243,6 +243,9 @@ table_base
         }
       }
     }
+  / s:select_stmt __ KW_AS? __ alias:ident? {
+      return  { subquery: s, as: alias };
+    }
 
 join_op
   = KW_LEFT __ KW_JOIN { return 'LEFT JOIN'; } 
@@ -607,7 +610,13 @@ like_op_right
 in_op_right
   = op:in_op __ LPAREN  __ l:expr_list __ RPAREN {
       return {
-        op    : op,  
+        op    : op,
+        right : l
+      }
+    }
+  / op:in_op __ l:select_stmt {
+    return {
+        op    : op,
         right : l
       }
     }

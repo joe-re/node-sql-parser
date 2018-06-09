@@ -595,5 +595,21 @@ describe('select test',function(){
     (e.name).should.eql('SyntaxError');
   });
 
+  it('IN operation subquery test', function() {
+    var sql, ast;
+
+    sql = "SELECT columnnames FROM tablename1 WHERE value IN (SELECT columnname FROM tablename2 WHERE condition)";
+    ast = Parser.parse(sql);
+    ast.where.right.type.should.eql('select')
+  });
+
+  it('FROM clause subquery test', function() {
+    var sql, ast;
+
+    sql = "SELECT sub FROM (SELECT * FROM tutorial.sf_crime_incidents_2014_01 WHERE day_of_week = 'Friday') sub WHERE sub.resolution = 'NONE'";
+    ast = Parser.parse(sql);
+    console.log(ast)
+    // ast.where.right.type.should.eql('select')
+  });
 })
 
