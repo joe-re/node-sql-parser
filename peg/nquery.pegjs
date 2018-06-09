@@ -131,14 +131,15 @@ select_stmt
     }
 
 extract_from_clause
-  = f:from_clause? __
-    o:(.*) {
+  = before:(__ KW_SELECT __ (!(KW_FROM) .)* { return text() }) __
+    f:from_clause? __
+    after:(.*) {
       return {
+        before: before,
         from: f,
-        other: o.join('')
+        after: after.join('')
       }
     }
-
 
 select_stmt_nake
   = KW_SELECT           __ 

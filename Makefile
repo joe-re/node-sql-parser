@@ -3,6 +3,7 @@ REPORTER = spec
 test: clean
 	@npm install
 	@./node_modules/pegjs/bin/pegjs -o ./base/nquery.js peg/nquery.pegjs
+	@npm run generateFromClauseParser
 	@./node_modules/mocha/bin/mocha  $(TESTS) --reporter spec
 
 clean:
