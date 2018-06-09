@@ -2,11 +2,11 @@ var should = require('should');
 var Parser = require('../../lib/parser');
 
 function inspect(obj) {
-  //console.log(require('util').inspect(obj, false, 10, true));  
+  //console.log(require('util').inspect(obj, false, 10, true));
 }
 
 describe('select test',function(){
-  
+
   it('clauses test', function() {
     var sql, ast;
 
@@ -19,7 +19,7 @@ describe('select test',function(){
     ast.groupby.should.not.eql(null);
     ast.orderby.should.not.eql(null);
     ast.limit.should.not.eql(null);
-  });   
+  });
 
   it('limit test', function() {
     var sql, ast;
@@ -33,7 +33,7 @@ describe('select test',function(){
     ast = Parser.parse(sql);
 
     ast.limit.should.eql([{type :'number', value : 0}, {type :'number', value : 3}]);
-  });   
+  });
 
   it('group by test', function() {
     var sql, ast;
@@ -43,12 +43,60 @@ describe('select test',function(){
 
     //inspect(ast);
     ast.groupby.should.eql([
-      { type: 'column_ref', table: '', column: 'd' },
-      { type: 'column_ref', table: 't', column: 'b' },
-      { type: 'column_ref', table: 't', column: 'c' }
+      {
+        type: 'column_ref',
+        table: '',
+        column: 'd',
+        "location": {
+          "end": {
+            "column": 39,
+            "line": 1,
+            "offset": 38
+          },
+          "start": {
+            "column": 38,
+            "line": 1,
+            "offset": 37
+          }
+        }
+      },
+      {
+        type: 'column_ref',
+        table: 't',
+        column: 'b',
+        "location": {
+          "end": {
+            "column": 44,
+            "line": 1,
+            "offset": 43
+          },
+          "start": {
+            "column": 41,
+            "line": 1,
+            "offset": 40
+          }
+        }
+      },
+      {
+        type: 'column_ref',
+        table: 't',
+        column: 'c',
+        "location": {
+          "end": {
+            "column": 49,
+            "line": 1,
+            "offset": 48
+          },
+          "start": {
+            "column": 46,
+            "line": 1,
+            "offset": 45
+          }
+        }
+      }
     ]);
-  });   
-  
+  });
+
   it('order by test', function() {
     var sql, ast;
 
@@ -57,21 +105,94 @@ describe('select test',function(){
 
     inspect(ast.orderby);
     ast.orderby.should.eql([
-      { expr: { type: 'column_ref', table: '', column: 'd' },type: 'ASC' },
-      { expr: { type: 'column_ref', table: 't', column: 'b' },type: 'DESC' },
-      { expr: { type: 'column_ref', table: 't', column: 'c' },type: 'ASC' },
-      {   
-        expr: { 
-            type: 'aggr_func',   
-            name: 'SUM', 
-            args: {
-              expr: { type: 'column_ref', table: '', column: 'e' } 
+      {
+        expr: {
+          type: 'column_ref',
+          table: '',
+          column: 'd',
+          "location": {
+            "end": {
+              "column": 39,
+              "line": 1,
+              "offset": 38
+            },
+            "start": {
+              "column": 38,
+              "line": 1,
+              "offset": 37
             }
+          }
+        },
+        type: 'ASC'
+      },
+      {
+        expr: {
+          type: 'column_ref',
+          table: 't',
+          column: 'b',
+          "location": {
+            "end": {
+              "column": 44,
+              "line": 1,
+              "offset": 43
+            },
+            "start": {
+              "column": 41,
+              "line": 1,
+              "offset": 40
+            }
+          }
+        },
+        type: 'DESC'
+      },
+      {
+        expr: {
+          type: 'column_ref',
+          table: 't',
+          column: 'c',
+          "location": {
+            "end": {
+              "column": 54,
+              "line": 1,
+              "offset": 53
+            },
+            "start": {
+              "column": 51,
+              "line": 1,
+              "offset": 50
+            }
+          }
+        },
+        type: 'ASC'
+      },
+      {
+        expr: {
+          type: 'aggr_func',
+          name: 'SUM',
+          args: {
+            expr: {
+              type: 'column_ref',
+              table: '',
+              column: 'e',
+              "location": {
+                "end": {
+                  "column": 61,
+                  "line": 1,
+                  "offset": 60
+                },
+                "start": {
+                  "column": 60,
+                  "line": 1,
+                  "offset": 59
+                }
+              }
+            }
+          }
         },
         type: 'ASC'
       }
     ]);
-  });   
+  });
 
   it('column clause test', function() {
     var sql, ast;
@@ -85,37 +206,92 @@ describe('select test',function(){
 
     //inspect(ast);
     ast.columns.should.eql([
-      { expr: { type: 'column_ref', table: '', column: 'a' }, as: 'aa' },
-      { expr: { type: 'column_ref', table: 'b', column: 'c' },  as: 'bc' },
-      { 
-        expr: { 
-          type: 'function', 
-          name: 'fun', 
-          args: {
-            type  : 'expr_list',  
-            value : [ { type: 'column_ref', table: '', column: 'd' } ]
+      {
+        expr: {
+          type: 'column_ref',
+          table: '',
+          column: 'a',
+          "location": {
+            "end": {
+              "column": 9,
+              "line": 1,
+              "offset": 8
+            },
+            "start": {
+              "column": 8,
+              "line": 1,
+              "offset": 7
+            }
           }
         },
-        as: null 
+        as: 'aa'
       },
-      { 
-        expr: { 
-          type: 'binary_expr', 
+      {
+        expr: {
+          type: 'column_ref',
+          table: 'b',
+          column: 'c',
+          "location": {
+            "end": {
+              "column": 17,
+              "line": 1,
+              "offset": 16
+            },
+            "start": {
+              "column": 14,
+              "line": 1,
+              "offset": 13
+            }
+          }
+        },
+        as: 'bc'
+      },
+      {
+        expr: {
+          type: 'function',
+          name: 'fun',
+          args: {
+            type  : 'expr_list',
+            value : [
+              {
+                type: 'column_ref',
+                table: '',
+                column: 'd',
+                "location": {
+                  "end": {
+                    "column": 30,
+                    "line": 1,
+                    "offset": 29
+                  },
+                  "start": {
+                    "column": 29,
+                    "line": 1,
+                    "offset": 28
+                  }
+                }
+              }
+            ]
+          }
+        },
+        as: null
+      },
+      {
+        expr: {
+          type: 'binary_expr',
           operator: '+',
           left: {
             type  : 'number',
-            value : 1 
+            value : 1
           },
           right: {
             type  : 'number',
             value : 3
           }
         },
-        as: null 
-      } 
+        as: null
+      }
     ]);
-   
-  });   
+  });
 
   it('where clause test', function() {
     var sql, ast;
@@ -127,30 +303,54 @@ describe('select test',function(){
     ast.where.should.eql({
       type: 'binary_expr',
       operator: 'AND',
-      left: { 
+      left: {
         type: 'binary_expr',
         operator: 'AND',
-        left: { 
+        left: {
           type: 'binary_expr',
           operator: '>',
-          left: { 
+          left: {
             type: 'column_ref',
             table: 't',
-            column: 'a' 
+            column: 'a',
+            "location": {
+              "end": {
+                "column": 27,
+                "line": 1,
+                "offset": 26
+              },
+              "start": {
+                "column": 24,
+                "line": 1,
+                "offset": 23
+              }
+            }
           },
-          right: { 
+          right: {
             type: 'number', value: 0
-          } 
+          }
         },
-        right: { 
+        right: {
           type: 'binary_expr',
           operator: 'BETWEEN',
-          left: { 
+          left: {
             type: 'column_ref',
             table: 't',
-            column: 'c' 
+            column: 'c',
+            "location": {
+              "end": {
+                "column": 39,
+                "line": 1,
+                "offset": 38
+              },
+              "start": {
+                "column": 36,
+                "line": 1,
+                "offset": 35
+              }
+            }
           },
-          right: { 
+          right: {
             type : 'expr_list',
             value : [
               { type: 'number', value: 1 },
@@ -176,10 +376,58 @@ describe('select test',function(){
     ast = Parser.parse(sql);
 
     //inspect(ast.from);
-    ast.from.should.eql([ 
-      { db: '', table: 't', as: null },
-      { db: 'a', table: 'b', as: 'b' },
-      { db: 'c', table: 'd', as: 'cd' } 
+    ast.from.should.eql([
+      {
+        db: '',
+        table: 't',
+        as: null,
+        "location": {
+          "end": {
+            "column": 17,
+            "line": 1,
+            "offset": 16
+          },
+          "start": {
+            "column": 16,
+            "line": 1,
+            "offset": 15
+          }
+        }
+      },
+      {
+        db: 'a',
+        table: 'b',
+        as: 'b',
+        "location": {
+          "end": {
+            "column": 24,
+            "line": 1,
+            "offset": 23
+          },
+          "start": {
+            "column": 19,
+            "line": 1,
+            "offset": 18
+          }
+        }
+      },
+      {
+        db: 'c',
+        table: 'd',
+        as: 'cd',
+        "location": {
+          "end": {
+            "column": 35,
+            "line": 1,
+            "offset": 34
+          },
+          "start": {
+            "column": 26,
+            "line": 1,
+            "offset": 25
+          }
+        }
+      }
     ]);
 
 
@@ -187,51 +435,138 @@ describe('select test',function(){
     ast = Parser.parse(sql);
 
     //inspect(ast.from);
-    ast.from.should.eql([ 
-      { db: '', table: 't', as: null },
-      { 
+    ast.from.should.eql([
+      {
+        db: '',
+        table: 't',
+        as: null,
+        "location": {
+          "end": {
+            "column": 17,
+            "line": 1,
+            "offset": 16
+          },
+          "start": {
+            "column": 15,
+            "line": 1,
+            "offset": 14
+          }
+        }
+      },
+      {
         db: 'a',
         table: 'b',
         as: 'b',
+        "location": {
+          "end": {
+            "column": 27,
+            "line": 1,
+            "offset": 26
+          },
+          "start": {
+            "column": 22,
+            "line": 1,
+            "offset": 21
+          }
+        },
         join: 'INNER JOIN',
-        on: { 
+        on: {
           type: 'binary_expr',
           operator: '=',
-          left: { 
+          left: {
             type: 'column_ref',
             table: 't',
-            column: 'a'
+            column: 'a',
+            "location": {
+              "end": {
+                "column": 34,
+                "line": 1,
+                "offset": 33
+              },
+              "start": {
+                "column": 31,
+                "line": 1,
+                "offset": 30
+              }
+            }
           },
-          right: { 
+          right: {
             type: 'column_ref',
             table: 'b',
-            column: 'c' 
+            column: 'c',
+            "location": {
+              "end": {
+                "column": 40,
+                "line": 1,
+                "offset": 39
+              },
+              "start": {
+                "column": 37,
+                "line": 1,
+                "offset": 36
+              }
+            }
           }
-        } 
+        }
       },
-      { 
+      {
         db: '',
         table: 'd',
         as: null,
         join: 'LEFT JOIN',
-        on: { 
+        "location": {
+          "end": {
+            "column": 53,
+            "line": 1,
+            "offset": 52
+          },
+          "start": {
+            "column": 51,
+            "line": 1,
+            "offset": 50
+          }
+        },
+        on: {
           type: 'binary_expr',
           operator: '=',
-          left: { 
+          left: {
             type: 'column_ref',
             table: 'd',
-            column: 'd'
+            column: 'd',
+            "location": {
+              "end": {
+                "column": 59,
+                "line": 1,
+                "offset": 58
+              },
+              "start": {
+                "column": 56,
+                "line": 1,
+                "offset": 55
+              }
+            }
           },
-          right: { 
+          right: {
             type: 'column_ref',
             table: 'd',
-            column: 'a' 
+            column: 'a',
+            "location": {
+              "end": {
+                "column": 65,
+                "line": 1,
+                "offset": 64
+              },
+              "start": {
+                "column": 62,
+                "line": 1,
+                "offset": 61
+              }
+            }
           }
         }
       }
     ]);
-
-  });   
+  });
 
   it('from clause test', function() {
     var sql, ast;

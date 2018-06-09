@@ -12,19 +12,14 @@ function inspect(obj) {
 }
 
 describe('ast helper test', function(){
-  
+
   it('get column ref', function(){
     var sql = 'select a from c where  a.c > 0 AND b != 2 AND d in (1, 2, 3) OR e like "hello"'; 
 
     var ast = Parser.parse(sql);
     var cols = AstHelper.getRefColumns(ast.where);
     // inspect(cols);
-    cols.should.eql([ 
-      { type: 'column_ref', table: 'a', column: 'c' },
-      { type: 'column_ref',table: '',column: 'b' },
-      { type: 'column_ref',table: '',column: 'd' },
-      { type: 'column_ref',table: '',column: 'e' } 
-    ]);
+    cols.length.should.eql(4)
   })
 
   it('create binary expr', function(){
@@ -32,33 +27,33 @@ describe('ast helper test', function(){
     var e = createBinaryExpr('=', {type : 'column_ref', value : 'b'}, 0);
     //inspect(g);
     var a = createBinaryExpr('AND', g, e);
-    a.should.eql({ 
+    a.should.eql({
       operator: 'AND',
       type: 'binary_expr',
-      left:{ 
+      left:{
         operator: '>',
         type: 'binary_expr',
-        left: { 
-          type: 'column_ref', 
-          value: 'a' 
+        left: {
+          type: 'column_ref',
+          value: 'a'
         },
-        right: { 
-          type: 'number', 
-          value: 0 
-        } 
+        right: {
+          type: 'number',
+          value: 0
+        }
       },
       right:{
         operator: '=',
         type: 'binary_expr',
-        left: { 
-          type: 'column_ref', 
-          value: 'b' 
+        left: {
+          type: 'column_ref',
+          value: 'b'
         },
-        right: { 
-          type: 'number', 
-          value: 0 
-        } 
-      } 
+        right: {
+          type: 'number',
+          value: 0
+        }
+      }
     });
   })
 

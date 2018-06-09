@@ -12,13 +12,32 @@ describe('expression test',function(){
     sql = "SELECT 1, 'str', `select`, true, fun(4), rand(), :id+1, cf1:name, :select";
     ast = Parser.parse(sql);
     //inspect(ast.columns);
-    ast.columns.should.eql([ 
+    ast.columns.should.eql([
       { expr: { type: 'number', value: 1 },as: null },
       { expr: { type: 'string', value: 'str' },as: null },
-      { expr: { type: 'column_ref', column: 'select', table : '' },as: null },
+      {
+        expr: {
+          type: 'column_ref',
+          column: 'select',
+          table : '',
+          "location": {
+            "end": {
+              "column": 26,
+              "line": 1,
+              "offset": 25
+            },
+            "start": {
+              "column": 18,
+              "line": 1,
+              "offset": 17
+            }
+          }
+        },
+        as: null
+      },
       { expr: { type: 'bool', value: true },as: null },
-      { 
-        expr: { 
+      {
+        expr: {
           type: 'function',
           name: 'fun',
           args: {
@@ -28,8 +47,8 @@ describe('expression test',function(){
         },
         as: null
       },
-      { 
-        expr: { 
+      {
+        expr: {
           type: 'function',
           name: 'rand',
           args: {
@@ -39,25 +58,37 @@ describe('expression test',function(){
         },
         as: null
       },
-      { 
-        expr: { 
+      {
+        expr: {
           type: 'binary_expr',
           operator: '+',
           left: { type: 'param', value: 'id' },
-          right: { type: 'number', value: 1 } 
+          right: { type: 'number', value: 1 }
         },
-        as: null 
+        as: null
       },
-      { 
-        expr: { 
+      {
+        expr: {
           type: 'column_ref',
           table: '',
-          column: 'cf1:name'
+          column: 'cf1:name',
+          "location": {
+            "end": {
+              "column": 65,
+              "line": 1,
+              "offset": 64
+            },
+            "start": {
+              "column": 57,
+              "line": 1,
+              "offset": 56
+            }
+          }
         },
-        as: null 
+        as: null
       },
-      { expr: { type: 'param', value: 'select' },as: null } 
-    ]) 
+      { expr: { type: 'param', value: 'select' },as: null }
+    ])
   });
 
   it('aggr function test', function() {
@@ -66,48 +97,72 @@ describe('expression test',function(){
     sql = "SELECT count(distinct a.id), count(*), SUM(a.id)";
     ast = Parser.parse(sql);
     inspect(ast);
-    ast.columns.should.eql([ 
-      { 
-        expr: { 
+    ast.columns.should.eql([
+      {
+        expr: {
           type: 'aggr_func',
           name: 'COUNT',
           args: {
             distinct: 'DISTINCT',
-            expr: { 
+            expr: {
               type: 'column_ref',
               table: 'a',
-              column: 'id' 
-            } 
-          } 
+              column: 'id',
+              "location": {
+                "end": {
+                  "column": 27,
+                  "line": 1,
+                  "offset": 26
+                },
+                "start": {
+                  "column": 23,
+                  "line": 1,
+                  "offset": 22
+                }
+              }
+            }
+          }
         },
-        as: null 
+        as: null
       },
-      { 
-        expr: { 
+      {
+        expr: {
           type: 'aggr_func',
           name: 'COUNT',
           args: {
-            expr : { 
-              type: 'star', value: '*' 
-            } 
+            expr : {
+              type: 'star', value: '*'
+            }
           }
         },
-        as: null 
-      }, 
-      { 
-        expr: { 
+        as: null
+      },
+      {
+        expr: {
           type: 'aggr_func',
           name: 'SUM',
           args: {
-            expr : { 
+            expr : {
               type  : 'column_ref',
               table : 'a',
-              column: 'id' 
-            } 
+              column: 'id',
+              "location": {
+                "end": {
+                  "column": 48,
+                  "line": 1,
+                  "offset": 47
+                },
+                "start": {
+                  "column": 44,
+                  "line": 1,
+                  "offset": 43
+                }
+              }
+            }
           }
         },
-        as: null 
-      } 
+        as: null
+      }
     ]);
 
   });
@@ -226,28 +281,40 @@ describe('expression test',function(){
     ast = Parser.parse(sql);
 
     //inspect(ast.where);
-    ast.where.should.eql({ 
+    ast.where.should.eql({
       type: 'binary_expr',
       operator: '!=',
-      left: { 
+      left: {
         type: 'binary_expr',
         operator: '<=',
         left: {
           type: 'binary_expr',
           operator: '>',
-          left: { 
+          left: {
             type: 'column_ref',
             table: '',
-            column: 'c' 
+            column: 'c',
+            "location": {
+              "end": {
+                "column": 24,
+                "line": 1,
+                "offset": 23
+              },
+              "start": {
+                "column": 23,
+                "line": 1,
+                "offset": 22
+              }
+            }
           },
-          right: { 
+          right: {
             type: 'binary_expr',
             operator: '+',
             left: { type: 'number', value: 1 },
-            right: { type: 'number', value: 3 } 
-          } 
+            right: { type: 'number', value: 3 }
+          }
         },
-        right: { type: 'number', value: 2 } 
+        right: { type: 'number', value: 2 }
       },
       right: { type: 'number', value: 1 }
     })
@@ -259,61 +326,97 @@ describe('expression test',function(){
 
     sql = "SELECT a FROM b WHERE c in(1, nUll,  3, 'str')";
     ast = Parser.parse(sql);
-    
-    ast.where.should.eql({ 
+
+    ast.where.should.eql({
       type: 'binary_expr',
       operator: 'IN',
-      left:{ 
+      left:{
         type: 'column_ref',
         table: '',
-        column: 'c' 
+        column: 'c',
+        "location": {
+          "end": {
+            "column": 24,
+            "line": 1,
+            "offset": 23
+          },
+          "start": {
+            "column": 23,
+            "line": 1,
+            "offset": 22
+          }
+        }
       },
       right: {
         type  : 'expr_list',
         value : [
-          { type: 'number', value: 1 }, 
-          { type: 'null', value: null }, 
-          { type: 'number', value:  3}, 
-          { type: 'string', value: 'str' } 
-        ] 
+          { type: 'number', value: 1 },
+          { type: 'null', value: null },
+          { type: 'number', value:  3},
+          { type: 'string', value: 'str' }
+        ]
       }
     });
 
   });
-  
+
   it('is comparison expr test', function() {
     var sql, ast;
 
     sql = "SELECT a FROM b WHERE c IS NULL";
     ast = Parser.parse(sql);
-    
-    ast.where.should.eql({ 
+
+    ast.where.should.eql({
       type: 'binary_expr',
       operator: 'IS',
-      left:{ 
+      left:{
         type: 'column_ref',
         table: '',
-        column: 'c' 
+        column: 'c',
+        "location": {
+          "end": {
+            "column": 24,
+            "line": 1,
+            "offset": 23
+          },
+          "start": {
+            "column": 23,
+            "line": 1,
+            "offset": 22
+          }
+        }
       },
-      right: { type: 'null', value: null } 
+      right: { type: 'null', value: null }
     });
   });
-  
+
   it('like comparison expr test', function() {
     var sql, ast;
 
     sql = "SELECT a FROM b WHERE c lIke 'p'";
     ast = Parser.parse(sql);
-    
-    ast.where.should.eql({ 
+
+    ast.where.should.eql({
       type: 'binary_expr',
       operator: 'LIKE',
-      left:{ 
+      left:{
         type: 'column_ref',
         table: '',
-        column: 'c' 
+        column: 'c',
+        "location": {
+          "end": {
+            "column": 24,
+            "line": 1,
+            "offset": 23
+          },
+          "start": {
+            "column": 23,
+            "line": 1,
+            "offset": 22
+          }
+        }
       },
-      right: { type: 'string', value: 'p' } 
+      right: { type: 'string', value: 'p' }
     });
 
   });
@@ -323,20 +426,32 @@ describe('expression test',function(){
     sql = "SELECT a FROM b WHERE c between 1 and '5'";
     ast = Parser.parse(sql);
 
-    ast.where.should.eql({ 
+    ast.where.should.eql({
       type: 'binary_expr',
       operator: 'BETWEEN',
-      left: { 
+      left: {
         type: 'column_ref',
         table: '',
-        column: 'c' 
+        column: 'c',
+        "location": {
+          "end": {
+            "column": 24,
+            "line": 1,
+            "offset": 23
+          },
+          "start": {
+            "column": 23,
+            "line": 1,
+            "offset": 22
+          }
+        }
       },
       right: {
         type : 'expr_list',
         value : [
           { type: 'number', value: 1 },
-          { type: 'string', value: '5' } 
-        ] 
+          { type: 'string', value: '5' }
+        ]
       }
     })
   });
@@ -348,29 +463,41 @@ describe('expression test',function(){
 
     //inspect(ast.where);
 
-    ast.where.should.eql({ 
+    ast.where.should.eql({
       type: 'binary_expr',
       operator: '=',
-      left: { 
+      left: {
         type: 'column_ref',
         table: '',
-        column: 'c' 
+        column: 'c',
+        "location": {
+          "end": {
+            "column": 24,
+            "line": 1,
+            "offset": 23
+          },
+          "start": {
+            "column": 23,
+            "line": 1,
+            "offset": 22
+          }
+        }
       },
-      right: { 
+      right: {
         type: 'unary_expr',
         operator: 'NOT',
-        expr: { 
+        expr: {
           type: 'unary_expr',
           operator: 'NOT',
-          expr: { 
+          expr: {
             type: 'binary_expr',
             operator: '>',
             left: {  type: 'number', value: 1},
-            right: { type: 'number', value: 2 } 
+            right: { type: 'number', value: 2 }
           }
         },
         paren: true
-      } 
+      }
     })
 
   });
@@ -383,39 +510,63 @@ describe('expression test',function(){
 
     //inspect(ast.where);
 
-    ast.where.should.eql({ 
+    ast.where.should.eql({
       type: 'binary_expr',
       operator: 'AND',
-      left: { 
+      left: {
         type: 'unary_expr',
         operator: 'NOT',
-        expr: { 
+        expr: {
           type: 'binary_expr',
           operator: '>',
-          left: { 
+          left: {
             type: 'column_ref',
             table: '',
-            column: 'c' 
+            column: 'c',
+            "location": {
+              "end": {
+                "column": 28,
+                "line": 1,
+                "offset": 27
+              },
+              "start": {
+                "column": 27,
+                "line": 1,
+                "offset": 26
+              }
+            }
           },
           right: {
-            type: 'number', value: 0 
-          } 
-        } 
+            type: 'number', value: 0
+          }
+        }
       },
-      right: { 
+      right: {
         type: 'unary_expr',
         operator: 'NOT',
-        expr:{ 
+        expr:{
           type: 'binary_expr',
           operator: '>',
-          left: { 
+          left: {
             type: 'column_ref',
             table: '',
-            column: 'a' 
+            column: 'a',
+            "location": {
+              "end": {
+                "column": 42,
+                "line": 1,
+                "offset": 41
+              },
+              "start": {
+                "column": 41,
+                "line": 1,
+                "offset": 40
+              }
+            }
           },
-          right: { type: 'number', value: 1 } 
-        } 
-      } 
+          right: { type: 'number', value: 1 }
+        }
+      }
     })
   });
 
@@ -425,50 +576,86 @@ describe('expression test',function(){
     sql = "SELECT a FROM b WHERE c = 0 OR d > 0 AND e < 0";
     ast = Parser.parse(sql);
     //inspect(ast.where);
-    ast.where.should.eql({ 
+    ast.where.should.eql({
       type: 'binary_expr',
       operator: 'OR',
-      left: { 
+      left: {
         type: 'binary_expr',
         operator: '=',
-        left: { 
+        left: {
           type: 'column_ref',
           table: '',
-          column: 'c' 
+          column: 'c',
+          "location": {
+            "end": {
+              "column": 24,
+              "line": 1,
+              "offset": 23
+            },
+            "start": {
+              "column": 23,
+              "line": 1,
+              "offset": 22
+            }
+          }
         },
-        right: { 
-          type: 'number', value: 0 
-        } 
+        right: {
+          type: 'number', value: 0
+        }
       },
-      right: { 
+      right: {
         type: 'binary_expr',
         operator: 'AND',
-        left: { 
+        left: {
           type: 'binary_expr',
           operator: '>',
-          left: { 
+          left: {
             type: 'column_ref',
             table: '',
-            column: 'd' 
-          },
-          right: { 
-            type: 'number', 
-            value: 0 
-          } 
-        },
-        right: { 
-          type: 'binary_expr',
-          operator: '<',
-          left: { 
-            type: 'column_ref',
-            table: '',
-            column: 'e' 
+            column: 'd',
+            "location": {
+              "end": {
+                "column": 33,
+                "line": 1,
+                "offset": 32
+              },
+              "start": {
+                "column": 32,
+                "line": 1,
+                "offset": 31
+              }
+            }
           },
           right: {
-            type: 'number', 
+            type: 'number',
             value: 0
-          } 
-        } 
+          }
+        },
+        right: {
+          type: 'binary_expr',
+          operator: '<',
+          left: {
+            type: 'column_ref',
+            table: '',
+            column: 'e',
+            "location": {
+              "end": {
+                "column": 43,
+                "line": 1,
+                "offset": 42
+              },
+              "start": {
+                "column": 42,
+                "line": 1,
+                "offset": 41
+              }
+            }
+          },
+          right: {
+            type: 'number',
+            value: 0
+          }
+        }
       }
     });
 
@@ -477,55 +664,91 @@ describe('expression test',function(){
     ast = Parser.parse(sql);
 
     //inspect(ast.where);
-    ast.where.should.eql({ 
+    ast.where.should.eql({
       type: 'binary_expr',
       operator: 'OR',
       left: {
         type: 'binary_expr',
         operator: 'AND',
-        left: { 
+        left: {
           type: 'binary_expr',
           operator: '=',
-          left: { 
+          left: {
             type: 'column_ref',
             table: '',
-            column: 'c' 
+            column: 'c',
+            "location": {
+              "end": {
+                "column": 24,
+                "line": 1,
+                "offset": 23
+              },
+              "start": {
+                "column": 23,
+                "line": 1,
+                "offset": 22
+              }
+            }
           },
-          right: { 
-            type: 'number', 
-            value: 0 
-          } 
+          right: {
+            type: 'number',
+            value: 0
+          }
         },
-        right: { 
+        right: {
           type: 'binary_expr',
           operator: '>',
           left: {
             type: 'column_ref',
             table: '',
-            column: 'd'
+            column: 'd',
+            "location": {
+              "end": {
+                "column": 34,
+                "line": 1,
+                "offset": 33
+              },
+              "start": {
+                "column": 33,
+                "line": 1,
+                "offset": 32
+              }
+            }
           },
-          right: { 
-            type: 'number', 
-            value: 0 
-          } 
-        } 
+          right: {
+            type: 'number',
+            value: 0
+          }
+        }
       },
-      right: { 
+      right: {
         type: 'binary_expr',
         operator: '<',
-        left: { 
+        left: {
           type: 'column_ref',
           table: '',
-          column: 'e' 
+          column: 'e',
+          "location": {
+            "end": {
+              "column": 43,
+              "line": 1,
+              "offset": 42
+            },
+            "start": {
+              "column": 42,
+              "line": 1,
+              "offset": 41
+            }
+          }
         },
-        right: { 
-          type: 'number', 
-          value: 0 
-        } 
+        right: {
+          type: 'number',
+          value: 0
+        }
       }
     });
 
-  });   
+  });
 
-});   
+});
 

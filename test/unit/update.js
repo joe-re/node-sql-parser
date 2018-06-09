@@ -34,7 +34,19 @@ describe('update test',function(){
             left: { 
               type: 'column_ref',
               table: '',
-              column: 'login_count' 
+              column: 'login_count',
+              "location": {
+                "end": {
+                  "column": 116,
+                  "line": 1,
+                  "offset": 115
+                },
+                "start": {
+                  "column": 105,
+                  "line": 1,
+                  "offset": 104
+                }
+              }
             },
             right: { 
               type: 'number', value: 1 
@@ -48,7 +60,19 @@ describe('update test',function(){
         left: { 
           type: 'column_ref',
           table: '',
-          column: 'id' 
+          column: 'id',
+          "location": {
+            "end": {
+              "column": 127,
+              "line": 1,
+              "offset": 126
+            },
+            "start": {
+              "column": 125,
+              "line": 1,
+              "offset": 124
+            }
+          }
         },
         right: { 
           type: 'number', value: 334094 
@@ -78,11 +102,7 @@ describe('update test',function(){
         {
           column: 'last_login_ip',
           table: 'user_info',
-          value: { type: 'string', value: 'hohoo' },
-          location: {
-            end: { "column": 174, "line": 1, "offset": 173 },
-            start: { "column": 149, "line": 1, "offset": 148 }
-          }
+          value: { type: 'string', value: 'hohoo' }
         },
         {
           column: 'login_count',
@@ -93,7 +113,19 @@ describe('update test',function(){
             left: {
               type: 'column_ref',
               table: 'user_info',
-              column: 'login_count'
+              column: 'login_count',
+              "location": {
+                "end": {
+                  "column": 156,
+                  "line": 1,
+                  "offset": 155
+                },
+                "start": {
+                  "column": 135,
+                  "line": 1,
+                  "offset": 134
+                }
+              }
             },
             right: {
               type: 'number', value: 1
@@ -109,9 +141,9 @@ describe('update test',function(){
           table: 'user_info',
           column: 'id',
           location: {
-            end: { "column": 199, "line": 1, "offset": 198 },
-            start: { "column": 183, "line": 1, "offset": 182 }
-           }
+            end: { "column": 177, "line": 1, "offset": 176 },
+            start: { "column": 165, "line": 1, "offset": 164 }
+          }
         },
         right: {
           type: 'number', value: 334094
@@ -149,7 +181,19 @@ describe('update test',function(){
             left: {
               type: 'column_ref',
               table: '',
-              column: 'login_count'
+              column: 'login_count',
+              "location": {
+                "end": {
+                  "column": 126,
+                  "line": 1,
+                  "offset": 125
+                },
+                "start": {
+                  "column": 113,
+                  "line": 1,
+                  "offset": 112
+                }
+              }
             },
             right: {
               type: 'number', value: 1
@@ -163,7 +207,19 @@ describe('update test',function(){
         left: {
           type: 'column_ref',
           table: '',
-          column: 'id'
+          column: 'id',
+          "location": {
+            "end": {
+              "column": 139,
+              "line": 1,
+              "offset": 138
+            },
+            "start": {
+              "column": 135,
+              "line": 1,
+              "offset": 134
+            }
+          }
         },
         right: {
           type: 'number', value: 334094
@@ -204,7 +260,19 @@ describe('update test',function(){
             left: {
               type: 'column_ref',
               table: 'user_info',
-              column: 'login_count'
+              column: 'login_count',
+              "location": {
+                "end": {
+                  "column": 174,
+                  "line": 1,
+                  "offset": 173
+                },
+                "start": {
+                  "column": 149,
+                  "line": 1,
+                  "offset": 148
+                }
+              }
             },
             right: {
               type: 'number', value: 1
@@ -218,7 +286,19 @@ describe('update test',function(){
         left: {
           type: 'column_ref',
           table: 'user_info',
-          column: 'id'
+          column: 'id',
+          "location": {
+            "end": {
+              "column": 199,
+              "line": 1,
+              "offset": 198
+            },
+            "start": {
+              "column": 183,
+              "line": 1,
+              "offset": 182
+            }
+          }
         },
         right: {
           type: 'number', value: 334094
@@ -227,5 +307,5 @@ describe('update test',function(){
     });
 
   });
-});   
+});
 

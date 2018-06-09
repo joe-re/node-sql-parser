@@ -11,118 +11,165 @@ describe('template test',function(){
 
     sql = 'select ( a NOT CONTAINS (:id, 1) AND c = :name)';
     ast = Parser.tplParse(sql, {
-        id : [1, 2,3],
-        name  : [true, null, 'str']
-      });
+      id : [1, 2,3],
+      name  : [true, null, 'str']
+    });
 
     //inspect(east);
     ast.should.eql({
-        type: 'select',
-        distinct: null,
-        columns: [ 
-          { 
-            expr: { 
+      type: 'select',
+      distinct: null,
+      columns: [
+        {
+          expr: {
+            type: 'binary_expr',
+            operator: 'AND',
+            left: {
               type: 'binary_expr',
-              operator: 'AND',
-              left: { 
-                type: 'binary_expr',
-                operator: 'NOT CONTAINS',
-                left: { 
-                  type: 'column_ref',
-                  table: '',
-                  column: 'a'
-                },
-                right:{ 
-                  type: 'expr_list',
-                  value: [ 
-                    { type: 'number', value: 1 },
-                    { type: 'number', value: 1 },
-                    { type: 'number', value: 2 },
-                    { type: 'number', value: 3 } 
-                  ] 
-                } 
+              operator: 'NOT CONTAINS',
+              left: {
+                type: 'column_ref',
+                table: '',
+                column: 'a',
+                "location": {
+                  "end": {
+                    "column": 11,
+                    "line": 1,
+                    "offset": 10
+                  },
+                  "start": {
+                    "column": 10,
+                    "line": 1,
+                    "offset": 9
+                  }
+                }
               },
-              right: { 
-                type: 'binary_expr',
-                operator: '=',
-                left: { 
-                  type: 'column_ref',
-                  table: '',
-                  column: 'c' 
-                },
-                right: { 
-                  type: 'expr_list',
-                  value: [ 
-                    { type: 'bool', value: true },
-                    { type: 'null', value: null },
-                    { type: 'string', value: 'str' } 
-                  ] 
-                } 
-              },
-              paren: true 
+              right:{
+                type: 'expr_list',
+                value: [ 
+                  { type: 'number', value: 1 },
+                  { type: 'number', value: 1 },
+                  { type: 'number', value: 2 },
+                  { type: 'number', value: 3 }
+                ]
+              }
             },
-            as: null 
-          } 
-        ],
-        from: null,
-        where: null,
-        groupby: null,
-        orderby: null,
-        limit: null 
+            right: {
+              type: 'binary_expr',
+              operator: '=',
+              left: {
+                type: 'column_ref',
+                table: '',
+                column: 'c',
+                "location": {
+                  "end": {
+                    "column": 39,
+                    "line": 1,
+                    "offset": 38
+                  },
+                  "start": {
+                    "column": 38,
+                    "line": 1,
+                    "offset": 37
+                  }
+                }
+              },
+              right: {
+                type: 'expr_list',
+                value: [
+                  { type: 'bool', value: true },
+                  { type: 'null', value: null },
+                  { type: 'string', value: 'str' }
+                ]
+              }
+            },
+            paren: true
+          },
+          as: null
+        }
+      ],
+      from: null,
+      where: null,
+      groupby: null,
+      orderby: null,
+      limit: null
     });
 
     sql = 'select ( a NOT CONTAINS (:id, 1) AND c = :name)';
     ast = Parser.tplParse(sql, {
-        id : [10, 9, 8],
-        name  : ['hello', 'world']
-      });
+      id : [10, 9, 8],
+      name  : ['hello', 'world']
+    });
 
     //inspect(east);
-    ast.columns.should.eql([ 
-      { 
-        expr:  { 
+    ast.columns.should.eql([
+      {
+        expr:  {
           type: 'binary_expr',
           operator: 'AND',
-          left: { 
+          left: {
             type: 'binary_expr',
             operator: 'NOT CONTAINS',
             left: {
               type: 'column_ref',
               table: '',
-              column: 'a' 
+              column: 'a',
+              "location": {
+                "end": {
+                  "column": 11,
+                  "line": 1,
+                  "offset": 10
+                },
+                "start": {
+                  "column": 10,
+                  "line": 1,
+                  "offset": 9
+                }
+              }
             },
             right: {
               type: 'expr_list',
-              value: [ 
+              value: [
                 { type: 'number', value: 1 },
                 { type: 'number', value: 10 },
                 { type: 'number', value: 9 },
-                { type: 'number', value: 8 } 
-              ] 
-            } 
+                { type: 'number', value: 8 }
+              ]
+            }
           },
-          right: { 
+          right: {
             type: 'binary_expr',
             operator: '=',
-            left: { 
+            left: {
               type: 'column_ref',
               table: '',
-              column: 'c' 
+              column: 'c',
+              "location": {
+                "end": {
+                  "column": 39,
+                  "line": 1,
+                  "offset": 38
+                },
+                "start": {
+                  "column": 38,
+                  "line": 1,
+                  "offset": 37
+                }
+              }
             },
-            right:  { 
+            right:  {
               type: 'expr_list',
-              value:  [ 
+              value:  [
                 { type: 'string', value: 'hello' },
-                { type: 'string', value: 'world' } 
-              ] 
-            } 
+                { type: 'string', value: 'world' }
+              ]
+            }
           },
-          paren: true 
+          paren: true
         },
-        as: null 
-      } 
+        as: null
+      }
     ]);
-
   })
 
   it('limit template ', function(){
@@ -145,7 +192,23 @@ describe('template test',function(){
     ast.where.should.eql( {
       type: 'binary_expr',
       operator : 'NOT CONTAINS',
-      left     : {type : 'column_ref', table : '', column : 'p'},
+      left     : {
+        type : 'column_ref',
+        table : '',
+        column : 'p',
+        "location": {
+          "end": {
+            "column": 25,
+            "line": 1,
+            "offset": 24
+          },
+          "start": {
+            "column": 24,
+            "line": 1,
+            "offset": 23
+          }
+        }
+      },
       right    : {
         type : 'expr_list',
         value : [
@@ -163,7 +226,23 @@ describe('template test',function(){
     ast.where.should.eql( {
       type: 'binary_expr',
       operator : 'BETWEEN',
-      left     : {type : 'column_ref', table : '', column : 'p'},
+      left     : {
+        type : 'column_ref',
+        table : '',
+        column : 'p',
+        "location": {
+          "end": {
+            "column": 25,
+            "line": 1,
+            "offset": 24
+          },
+          "start": {
+            "column": 24,
+            "line": 1,
+            "offset": 23
+          }
+        }
+      },
       right    :  {
         type : 'expr_list',
         value : [
