@@ -226,6 +226,7 @@ function peg$parse(input, options) {
               return t;
             } else {
               return  {
+                type: 'table',
                 db    : db,
                 table : t,
                 as    : alias,
@@ -239,6 +240,7 @@ function peg$parse(input, options) {
               return t;
             } else {
               return  {
+                type: 'table',
                 db    : '',
                 table : t,
                 as    : alias,

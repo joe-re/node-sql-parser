@@ -216,13 +216,14 @@ table_join
     } 
  
 //NOTE that ,the table assigned to `var` shouldn't write in `table_join`
-table_base 
+table_base
   = db:db_name __ DOT __ t:table_name __ KW_AS? __ alias:ident? {
       if (t && t.type == 'var') {
         t.as = alias;
         return t;
       } else {
         return  {
+          type: 'table',
           db    : db,
           table : t,
           as    : alias,
@@ -236,6 +237,7 @@ table_base
         return t;
       } else {
         return  {
+          type: 'table',
           db    : '',
           table : t,
           as    : alias,

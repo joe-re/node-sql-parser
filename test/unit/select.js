@@ -378,6 +378,7 @@ describe('select test',function(){
     //inspect(ast.from);
     ast.from.should.eql([
       {
+        type: 'table',
         db: '',
         table: 't',
         as: null,
@@ -395,6 +396,7 @@ describe('select test',function(){
         }
       },
       {
+        type: 'table',
         db: 'a',
         table: 'b',
         as: 'b',
@@ -412,6 +414,7 @@ describe('select test',function(){
         }
       },
       {
+        type: 'table',
         db: 'c',
         table: 'd',
         as: 'cd',
@@ -437,6 +440,7 @@ describe('select test',function(){
     //inspect(ast.from);
     ast.from.should.eql([
       {
+        type: 'table',
         db: '',
         table: 't',
         as: null,
@@ -454,6 +458,7 @@ describe('select test',function(){
         }
       },
       {
+        type: 'table',
         db: 'a',
         table: 'b',
         as: 'b',
@@ -510,6 +515,7 @@ describe('select test',function(){
         }
       },
       {
+        type: 'table',
         db: '',
         table: 'd',
         as: null,
