@@ -131,7 +131,7 @@ select_stmt
     }
 
 extract_from_clause
-  = before:(__ KW_SELECT __ (!(KW_FROM) .)* { return text() }) __
+  = before:(__ LPAREN? __ KW_SELECT __ (!(KW_FROM) .)* { return text() }) __
     f:from_clause? __
     after:(.*) {
       return {
@@ -249,7 +249,10 @@ table_base
   / s:select_stmt __ KW_AS? __ alias:ident? {
       return  { type: 'subquery', subquery: s, as: alias, location: location() };
     }
-  / LPAREN __ text:([^)]*) __ RPAREN __ KW_AS? __ alias:ident? {
+  / text:(LPAREN __ table:table_base __ RPAREN) __ KW_AS? __ alias:ident? {
+      return  { type: 'subquery', subquery: table, as: alias, location: location() };
+    }
+  / text:(LPAREN __ ([^)]* {return text()}) __ RPAREN) __ KW_AS? __ alias:ident? {
       return  { type: 'incomplete_subquery', text: text.join(''), as: alias, location: location() };
     }
 
