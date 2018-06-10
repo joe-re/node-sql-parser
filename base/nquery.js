@@ -2714,6 +2714,9 @@ function peg$parse(input, options) {
                           s12 = peg$parse__();
                           if (s12 !== peg$FAILED) {
                             s13 = peg$parsewhere_clause();
+                            if (s13 === peg$FAILED) {
+                              s13 = null;
+                            }
                             if (s13 !== peg$FAILED) {
                               peg$savedPos = s0;
                               s1 = peg$c37(s3, s7, s11, s13);
@@ -2789,6 +2792,9 @@ function peg$parse(input, options) {
                     s8 = peg$parse__();
                     if (s8 !== peg$FAILED) {
                       s9 = peg$parsewhere_clause();
+                      if (s9 === peg$FAILED) {
+                        s9 = null;
+                      }
                       if (s9 !== peg$FAILED) {
                         peg$savedPos = s0;
                         s1 = peg$c38(s3, s7, s9);

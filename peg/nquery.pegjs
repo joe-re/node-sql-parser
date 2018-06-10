@@ -333,7 +333,7 @@ update_stmt
     t:table_name __
     KW_SET       __
     l:set_list   __
-    w:where_clause {
+    w:where_clause? {
       return {
         type  : 'update',
         db    : db,
@@ -346,7 +346,7 @@ update_stmt
     t:table_name __
     KW_SET       __
     l:set_list   __
-    w:where_clause {
+    w:where_clause? {
       return {
         type  : 'update',
         db    : '',
