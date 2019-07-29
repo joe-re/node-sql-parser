@@ -142,24 +142,34 @@ extract_from_clause
     }
 
 select_stmt_nake
-  = KW_SELECT           __ 
+  = val:select_keyword  __
     d:KW_DISTINCT?      __
-    c:column_clause     __  
+    c:column_clause     __
     f:from_clause?      __
-    w:where_clause?     __  
-    g:group_by_clause?  __  
+    w:where_clause?     __
+    g:group_by_clause?  __
     o:order_by_clause?  __
     l:limit_clause?  {
       return {
         type      : 'select',
+        keyword   : val,
         distinct  : d,
         columns   : c,
         from      : f,
         where     : w,
         groupby   : g,
         orderby   : o,
-        limit     : l
+        limit     : l,
+        location  : location()
       }
+  }
+
+select_keyword
+  = val: KW_SELECT {
+    return {
+      value: val && val[0],
+      location: location()
+    }
   }
 
 column_clause
