@@ -167,6 +167,7 @@ select_stmt_nake
 select_keyword
   = val: KW_SELECT {
     return {
+      type: 'keyword',
       value: val && val[0],
       location: location()
     }
@@ -196,7 +197,24 @@ alias_clause
   = KW_AS? __ i:ident { return i; }
 
 from_clause
-  = KW_FROM __ l:table_ref_list { return l; }
+  = k:from_keyword __
+    l:table_ref_list {
+      return {
+        type: 'from',
+        keyword: k,
+        tables: l,
+        location: location()
+      }
+  }
+
+from_keyword
+  = val: KW_FROM {
+    return {
+      type: 'keyword',
+      value: val && val[0],
+      location: location()
+    }
+  }
 
 table_ref_list
   = head:table_base
