@@ -305,7 +305,26 @@ on_clause
   = KW_ON __ e:expr { return e; }
 
 where_clause 
-  = KW_WHERE __ e:expr { return e; } 
+  = k: where_keyword __
+    e:expr {
+      return {
+        type: 'where',
+        keyword: k,
+        expression: e,
+        location: location()
+      }
+    } 
+
+where_keyword
+  = val: KW_WHERE {
+    return {
+      type: 'keyword',
+      value: val && val[0],
+      location: location()
+    }
+  }
+
+
 group_by_clause
   = KW_GROUP __ KW_BY __ l:column_ref_list { return l; }
 
