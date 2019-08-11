@@ -618,20 +618,23 @@ function peg$parse(input, options) {
           },
       peg$c121 = function() {
             return {
-              type  : 'null',
-              value : null
+              type     : 'null',
+              value    : null,
+              location : location()
             };  
           },
       peg$c122 = function() { 
             return {
-              type  : 'bool',
-              value : true
+              type     : 'bool',
+              value    : true,
+              location : location()
             };  
           },
       peg$c123 = function() { 
             return {
-              type  : 'bool',
-              value : false
+              type     : 'bool',
+              value    : false,
+              location : location()
             };  
           },
       peg$c124 = "\"",
@@ -640,8 +643,9 @@ function peg$parse(input, options) {
       peg$c127 = peg$literalExpectation("'", false),
       peg$c128 = function(ca) {
             return {
-              type  : 'string',
-              value : ca[1].join('')
+              type     : 'string',
+              value    : ca[1].join(''),
+              location : location()
             }
           },
       peg$c129 = /^[^'\\\0-\x1F\x7F]/,
@@ -684,8 +688,9 @@ function peg$parse(input, options) {
       peg$c164 = peg$classExpectation(["\n", "\r"], false, false),
       peg$c165 = function(n) {
             return {
-              type  : 'number',
-              value : n 
+              type    : 'number',
+              value   : n,
+              location: location() 
             }  
           },
       peg$c166 = function(int_, frac, exp) { return parseFloat(int_ + frac + exp); },
@@ -9172,7 +9177,8 @@ function peg$parse(input, options) {
         type      : 'binary_expr',
         operator  : op,
         left      : left,
-        right     : right
+        right     : right,
+        location  : location()
       }  
     }
 

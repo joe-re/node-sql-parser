@@ -30,7 +30,8 @@
       type      : 'binary_expr',
       operator  : op,
       left      : left,
-      right     : right
+      right     : right,
+      location  : location()
     }  
   }
 
@@ -861,22 +862,25 @@ literal_list
 literal_null
   = KW_NULL {
       return {
-        type  : 'null',
-        value : null
+        type     : 'null',
+        value    : null,
+        location : location()
       };  
     }
 
 literal_bool 
   = KW_TRUE { 
       return {
-        type  : 'bool',
-        value : true
+        type     : 'bool',
+        value    : true,
+        location : location()
       };  
     }
   / KW_FALSE { 
       return {
-        type  : 'bool',
-        value : false
+        type     : 'bool',
+        value    : false,
+        location : location()
       };  
     }
 
@@ -884,8 +888,9 @@ literal_string
   = ca:( ('"' double_char* '"') 
         /("'" single_char* "'")) {
       return {
-        type  : 'string',
-        value : ca[1].join('')
+        type     : 'string',
+        value    : ca[1].join(''),
+        location : location()
       }
     }
 
@@ -917,8 +922,9 @@ line_terminator
 literal_numeric
   = n:number {
       return {
-        type  : 'number',
-        value : n 
+        type    : 'number',
+        value   : n,
+        location: location() 
       }  
     }
 
