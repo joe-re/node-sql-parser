@@ -6,6 +6,7 @@
   "repository": {
     "url": "https://github.com/joe-re/node-sql-parser"
   },
+  "typings": "types/index.d.ts",
   "scripts": {
     "test": "make test",
     "build": "npm run generateParser && npm run generateFromClauseParser",
