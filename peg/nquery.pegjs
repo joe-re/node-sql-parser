@@ -176,7 +176,7 @@ select_keyword
 
 column_clause
   = (KW_ALL / (STAR !ident_start)) {
-      return '*';
+      return { type: 'star', value: '*' };
     }  
   / head:column_list_item tail:(__ COMMA __ column_list_item)* {
       return createList(head, tail);
@@ -189,8 +189,10 @@ column_clause
 column_list_item
   = e:additive_expr __ alias:alias_clause? { 
       return {
+        type: 'column_list_item',
         expr : e, 
-        as : alias
+        as : alias,
+        location: location()
       }; 
     } 
 

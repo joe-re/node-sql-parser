@@ -199,15 +199,17 @@ function peg$parse(input, options) {
           }
         },
       peg$c14 = function() {
-            return '*';
+            return { type: 'star', value: '*' };
           },
       peg$c15 = function(head, tail) {
             return createList(head, tail);
           },
       peg$c16 = function(e, alias) { 
             return {
+              type: 'column_list_item',
               expr : e, 
-              as : alias
+              as : alias,
+              location: location()
             }; 
           },
       peg$c17 = function(i) { return i; },
