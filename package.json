@@ -2,7 +2,7 @@
   "author": "windyrobin",
   "name": "@joe-re/node-sql-parser",
   "description": "sql parser for nodejs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": {
     "url": "https://github.com/joe-re/node-sql-parser"
   },
