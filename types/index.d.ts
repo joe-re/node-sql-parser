@@ -10,6 +10,7 @@ export type NodeRange = {
 }
 
 export type BaseNode = {
+  type: string
   location: NodeRange
 }
 
@@ -62,7 +63,7 @@ export type ColumnListItemNode = {
   type: 'column_list_item',
   expr: ColumnRefNode,
   as: string | null,
-  localtion: NodeRange
+  location: NodeRange
 }
 
 export type ColumnRefNode = {
