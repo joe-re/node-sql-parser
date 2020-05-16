@@ -1,0 +1,35 @@
+curl -X POST https://api.dropboxapi.com/2/files/list_folder \
+    --header "Authorization: Bearer VMDlA2_WwccAAAAAAAATLyNukhV3KDZQFfO4Qa7FqxOKjMRDtfzUmsjFdu00B1nG" \
+    --header "Content-Type: application/json" \
+    --data "{\"path\": \"\",\"recursive\": false,\"include_media_info\": false,\"include_deleted\": false,\"include_has_explicit_shared_members\": false,\"include_mounted_folders\": true}"
+
+curl -X POST https://api.dropboxapi.com/2/files/get_temporary_link \
+    --header "Authorization: Bearer VMDlA2_WwccAAAAAAAATLyNukhV3KDZQFfO4Qa7FqxOKjMRDtfzUmsjFdu00B1nG" \
+    --header "Content-Type: application/json" \
+    --data "{\"path\": \"/TEST/demo.mp4\"}"
+
+http://localhost:8080/auth/#access_token=VMDlA2_WwccAAAAAAAATOagRGPIMhhd5LCR8VDIb4P_pefECC4wojv_ZknbmHOAJ&token_type=bearer&uid=242126163&account_id=dbid%3AAAD8R1gyOau1SgN1CnhY8j6Re8HljKjDY-w
+
+curl -X POST https://api.dropboxapi.com/2/sharing/list_folders \
+    --header "Authorization: Bearer VMDlA2_WwccAAAAAAAATOagRGPIMhhd5LCR8VDIb4P_pefECC4wojv_ZknbmHOAJ" \
+    --header "Content-Type: application/json" \
+    --data "{\"limit\": 100,\"actions\": []}"
+
+curl -X POST https://api.dropboxapi.com/2/sharing/list_received_files \
+    --header "Authorization: Bearer VMDlA2_WwccAAAAAAAATOagRGPIMhhd5LCR8VDIb4P_pefECC4wojv_ZknbmHOAJ" \
+    --header "Content-Type: application/json" \
+    --data "{\"limit\": 100,\"actions\": []}"
+
+curl -X POST https://api.dropboxapi.com/2/sharing/list_shared_links \
+    --header "Authorization: Bearer VMDlA2_WwccAAAAAAAATOagRGPIMhhd5LCR8VDIb4P_pefECC4wojv_ZknbmHOAJ" \
+    --header "Content-Type: application/json" \
+    --data "{\"cursor\": \"ZtkX9_EHj3x7PMkVuFIhwKYXEpwpLwyxp9vMKomUhllil9q7eWiAu\"}" | jq '.'
+
+curl -X POST https://api.dropboxapi.com/2/files/list_folder --header "Authorization: Bearer VMDlA2_WwccAAAAAAAATOagRGPIMhhd5LCR8VDIb4P_pefECC4wojv_ZknbmHOAJ" --header "Content-Type: application/json" --data "{\"path\": \"ns:4164490688\"}"
+
+curl -X POST https://api.dropboxapi.com/2/files/list_folder --header "Authorization: Bearer VMDlA2_WwccAAAAAAAATOagRGPIMhhd5LCR8VDIb4P_pefECC4wojv_ZknbmHOAJ" --header "Content-Type: application/json" --data "{\"path\": \"ns:4164490688\"}"
+
+curl -X POST https://api.dropboxapi.com/2/sharing/mount_folder \
+    --header "Authorization: Bearer VMDlA2_WwccAAAAAAAATOagRGPIMhhd5LCR8VDIb4P_pefECC4wojv_ZknbmHOAJ" \
+    --header "Content-Type: application/json" \
+    --data "{\"shared_folder_id\": \"ns:4164490688\"}"

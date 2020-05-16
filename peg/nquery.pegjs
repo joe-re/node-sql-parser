@@ -30,7 +30,8 @@
       type      : 'binary_expr',
       operator  : op,
       left      : left,
-      right     : right
+      right     : right,
+      location  : location()
     }  
   }
 
@@ -142,29 +143,40 @@ extract_from_clause
     }
 
 select_stmt_nake
-  = KW_SELECT           __ 
+  = val:select_keyword  __
     d:KW_DISTINCT?      __
-    c:column_clause     __  
+    c:column_clause     __
     f:from_clause?      __
-    w:where_clause?     __  
-    g:group_by_clause?  __  
+    w:where_clause?     __
+    g:group_by_clause?  __
     o:order_by_clause?  __
     l:limit_clause?  {
       return {
         type      : 'select',
+        keyword   : val,
         distinct  : d,
         columns   : c,
         from      : f,
         where     : w,
         groupby   : g,
         orderby   : o,
-        limit     : l
+        limit     : l,
+        location  : location()
       }
+  }
+
+select_keyword
+  = val: KW_SELECT {
+    return {
+      type: 'keyword',
+      value: val && val[0],
+      location: location()
+    }
   }
 
 column_clause
   = (KW_ALL / (STAR !ident_start)) {
-      return '*';
+      return { type: 'star', value: '*' };
     }  
   / head:column_list_item tail:(__ COMMA __ column_list_item)* {
       return createList(head, tail);
@@ -177,8 +189,10 @@ column_clause
 column_list_item
   = e:additive_expr __ alias:alias_clause? { 
       return {
+        type: 'column_list_item',
         expr : e, 
-        as : alias
+        as : alias,
+        location: location()
       }; 
     } 
 
@@ -186,7 +200,24 @@ alias_clause
   = KW_AS? __ i:ident { return i; }
 
 from_clause
-  = KW_FROM __ l:table_ref_list { return l; }
+  = k:from_keyword __
+    l:table_ref_list {
+      return {
+        type: 'from',
+        keyword: k,
+        tables: l,
+        location: location()
+      }
+  }
+
+from_keyword
+  = val: KW_FROM {
+    return {
+      type: 'keyword',
+      value: val && val[0],
+      location: location()
+    }
+  }
 
 table_ref_list
   = head:table_base
@@ -277,7 +308,26 @@ on_clause
   = KW_ON __ e:expr { return e; }
 
 where_clause 
-  = KW_WHERE __ e:expr { return e; } 
+  = k: where_keyword __
+    e:expr {
+      return {
+        type: 'where',
+        keyword: k,
+        expression: e,
+        location: location()
+      }
+    } 
+
+where_keyword
+  = val: KW_WHERE {
+    return {
+      type: 'keyword',
+      value: val && val[0],
+      location: location()
+    }
+  }
+
+
 group_by_clause
   = KW_GROUP __ KW_BY __ l:column_ref_list { return l; }
 
@@ -814,22 +864,25 @@ literal_list
 literal_null
   = KW_NULL {
       return {
-        type  : 'null',
-        value : null
+        type     : 'null',
+        value    : null,
+        location : location()
       };  
     }
 
 literal_bool 
   = KW_TRUE { 
       return {
-        type  : 'bool',
-        value : true
+        type     : 'bool',
+        value    : true,
+        location : location()
       };  
     }
   / KW_FALSE { 
       return {
-        type  : 'bool',
-        value : false
+        type     : 'bool',
+        value    : false,
+        location : location()
       };  
     }
 
@@ -837,8 +890,9 @@ literal_string
   = ca:( ('"' double_char* '"') 
         /("'" single_char* "'")) {
       return {
-        type  : 'string',
-        value : ca[1].join('')
+        type     : 'string',
+        value    : ca[1].join(''),
+        location : location()
       }
     }
 
@@ -870,8 +924,9 @@ line_terminator
 literal_numeric
   = n:number {
       return {
-        type  : 'number',
-        value : n 
+        type    : 'number',
+        value   : n,
+        location: location() 
       }  
     }
 
