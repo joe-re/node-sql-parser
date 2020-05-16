@@ -48,7 +48,7 @@ export type SelectStatement = {
 export type FromClause = {
   type: 'from',
   keyword: KeywordNode,
-  tables: any,
+  tables: FromTableNode[],
   location: NodeRange
 }
 
@@ -75,4 +75,41 @@ export type ColumnRefNode = {
 
 export type StarNode = { type: 'star', value: '*' }
 
+export type FromTableNode = TableNode | SubqueryNode | IncompleteSubqueryNode
+
+export type TableNode = {
+  type: 'table',
+  db: string,
+  table: string,
+  as: string | null,
+  location: NodeRange,
+  join?: 'INNER JOIN' | 'LEFT JOIN',
+  on?: any
+}
+
+export type SubqueryNode = {
+  type: 'subquery',
+  as: 'string' | null,
+  subquery: SelectStatement,
+  location: NodeRange
+}
+
+export type IncompleteSubqueryNode = {
+  type: 'incomplete_subquery',
+  as: 'string' | null,
+  text: string,
+  location: NodeRange
+}
+
+type FromClauseParserResult = {
+  before: string,
+  from: FromClause | null,
+  after: string
+}
+
+export function parseFromClause(sql: string): FromClauseParserResult
 export function parse(sql: string): SelectStatement
+export class AstReader {
+  constructor (ast: any)
+  getAst: () => SelectStatement
+}
