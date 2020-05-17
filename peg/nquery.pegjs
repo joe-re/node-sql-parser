@@ -435,8 +435,8 @@ replace_insert_stmt
   = ri:replace_insert       __
     KW_INTO                 __
     db:db_name    __  DOT   __
-    t:table_name  __ LPAREN __
-    c:column_list __ RPAREN __
+    t:table_name  __
+    c:insert_column_list __
     v:value_clause             {
       return {
         type      : ri,
@@ -468,8 +468,8 @@ replace_insert_stmt
     }
   / ri:replace_insert       __
     KW_INTO                 __
-    t:table_name  __ LPAREN __
-    c:column_list  __ RPAREN __
+    t:table_name  __
+    c:insert_column_list __
     v:value_clause             {
       return {
         type      : ri,
@@ -498,6 +498,12 @@ replace_insert_stmt
 
       return v;
     }
+
+insert_column_list =
+  LPAREN __ (c:column_list __ (RPAREN / !{error('EXPECTED COLUMN NAME')}) {
+    return c
+  })
+
 
 replace_insert
   = KW_INSERT   { return 'insert'; } 
